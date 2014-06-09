@@ -1,0 +1,6 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine on
+
+  RewriteCond %{THE_REQUEST} !^(/server-status)
+  RewriteRule    (.*) app/webroot/$1 [L]
+</IfModule>

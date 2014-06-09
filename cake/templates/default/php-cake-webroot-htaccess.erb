@@ -1,0 +1,14 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  RewriteBase <%= node['deploy-project']['base']; %>
+
+  <% unless node['deploy-project']['redirect'].nil? %>
+      RewriteCond %{HTTP_HOST} !^<%= Regexp.escape(node['deploy-project']['redirect']) %> [NC]
+      RewriteRule ^(.*)$ http://<%= node['deploy-project']['redirect'] %> [R=301,L]
+  <% end %>
+
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>

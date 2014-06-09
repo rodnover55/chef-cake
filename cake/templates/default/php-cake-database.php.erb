@@ -1,0 +1,14 @@
+<?php
+
+class DATABASE_CONFIG {
+    public $default = array(
+        'datasource' => 'Database/Mysql',
+        'persistent' => false,
+        'host' => '<%= node['deploy-project']['db']['host'] %>',
+        'login' => '<%= node['deploy-project']['db']['user'] %>',
+        'password' => '<%= node['deploy-project']['db']['password'] %>@Si',
+        'database' => '<%= node['deploy-project']['db']['database'] || node['deploy-project']['project'] %>',
+        'prefix' => '',
+        'encoding' => 'utf8',
+    );
+}
