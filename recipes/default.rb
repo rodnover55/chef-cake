@@ -36,3 +36,9 @@ end
     not_if { node['cake']['timezone'].nil? }
   end
 end
+
+
+execute 'echo "" | app/Console/cake schema create' do
+  cwd node['deploy-project']['path']
+  action :run
+end
