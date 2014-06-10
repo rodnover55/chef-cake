@@ -22,9 +22,17 @@ template "#{node['deploy-project']['path']}/app/webroot/.htaccess" do
   group node['apache']['group']
 end
 
-
 file "/etc/php5/apache2/conf.d/20-timezone.ini" do
   content "date.timezone = #{node['cake']['timezone']}"
   notifies :restart, 'service[apache2]', :delayed
   not_if { node['cake']['timezone'].nil? }
+end
+
+['/etc/php5/apache2/conf.d/20-timezone.ini',
+ '/etc/php5/cli/conf.d/20-timezone.ini'].each do |fn|
+  file fn do
+    content "date.timezone = #{node['cake']['timezone']}"
+    notifies :restart, 'service[apache2]', :delayed
+    not_if { node['cake']['timezone'].nil? }
+  end
 end
