@@ -38,7 +38,14 @@ end
 end
 
 
-execute 'echo "" | app/Console/cake schema create' do
+execute 'echo "n\ny\n" | app/Console/cake schema create' do
   cwd node['deploy-project']['path']
-  action :run
+  action :nothing
+  subscribes :run, 'execute[end configure]'
+end
+
+execute 'echo -e "y\n" | app/Console/cake schema update' do
+  cwd node['deploy-project']['path']
+  action :nothing
+  subscribes :run, 'execute[end configure]'
 end
