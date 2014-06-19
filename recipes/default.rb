@@ -22,14 +22,11 @@ template "#{node['deploy-project']['path']}/app/webroot/.htaccess" do
   group node['apache']['group']
 end
 
-file "/etc/php5/apache2/conf.d/20-timezone.ini" do
-  content "date.timezone = #{node['cake']['timezone']}"
-  notifies :restart, 'service[apache2]', :delayed
-  not_if { node['cake']['timezone'].nil? }
-end
-
 ['/etc/php5/apache2/conf.d/20-timezone.ini',
  '/etc/php5/cli/conf.d/20-timezone.ini'].each do |fn|
+  directory ::File.dirname(fn) do
+    recursive true
+  end
   file fn do
     content "date.timezone = #{node['cake']['timezone']}"
     notifies :restart, 'service[apache2]', :delayed
@@ -39,12 +36,6 @@ end
 
 
 execute 'echo "n\ny\n" | app/Console/cake schema create' do
-  cwd node['deploy-project']['path']
-  action :nothing
-  subscribes :run, 'execute[end configure]'
-end
-
-execute 'echo -e "y\n" | app/Console/cake schema update' do
   cwd node['deploy-project']['path']
   action :nothing
   subscribes :run, 'execute[end configure]'
