@@ -42,7 +42,7 @@ end
     action :delete
     recursive true
   end
-  
+
   directory path do
     owner node['apache']['user']
     group node['apache']['group']
@@ -51,6 +51,12 @@ end
 
 
 execute 'echo "n\ny\n" | app/Console/cake schema create' do
+  cwd node['deploy-project']['path']
+  action :nothing
+  subscribes :run, 'execute[end configure]'
+end
+
+execute 'echo "y\n" | app/Console/cake schema update' do
   cwd node['deploy-project']['path']
   action :nothing
   subscribes :run, 'execute[end configure]'
