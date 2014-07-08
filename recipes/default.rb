@@ -34,6 +34,21 @@ end
   end
 end
 
+["#{node['deploy-project']['path']}/app/tmp/cache/persistent",
+ "#{node['deploy-project']['path']}/app/tmp/cache/models",
+ "#{node['deploy-project']['path']}/app/tmp/cache/views"
+].each do |path|
+  directory path do
+    action :delete
+    recursive true
+  end
+  
+  directory path do
+    owner node['apache']['user']
+    group node['apache']['group']
+  end
+end
+
 
 execute 'echo "n\ny\n" | app/Console/cake schema create' do
   cwd node['deploy-project']['path']
