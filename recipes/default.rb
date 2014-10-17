@@ -1,3 +1,5 @@
+include_recipe 'deploy-project::enviroment'
+
 unless node['deploy-project']['db']['install'].nil?
   db_name = node['deploy-project']['db']['database'] || node['deploy-project']['project']
   command =
